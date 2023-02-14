@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  xui:
+    image: enwaiax/x-ui:latest
+    expose:
+      - 54321
+      - 443
+  nginx:
+    depends_on:
+      - xui
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - "./conf.d:/etc/nginx/conf.d"
+
+volumes:
+  hello-world: {}
