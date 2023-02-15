@@ -40,6 +40,7 @@ issue(){
 
 install(){
 
+    log "Start to install certificaion."
     mkdir -p ${CERT_DIR}
 
     acme.sh --install-cert -d ${HOST} \
@@ -58,10 +59,12 @@ checkout
 
 if [ $? == 1 ]; then
     log "Now. we need to issue a cert."
-    issue && install
+    issue
 fi
 
 log "Check certification again.."
 acme.sh --list
+
+install
 
 exec "$@"
