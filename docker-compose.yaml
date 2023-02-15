@@ -4,6 +4,8 @@ services:
   xui:
     image: enwaiax/x-ui:latest
     container_name: xui
+    volumes:
+      - "xui:/etc/x-ui"
     expose:
       - 54321
       - 443
@@ -20,6 +22,8 @@ services:
       - "80:80"
     volumes:
       - "./conf.d:/etc/nginx/conf.d"
+      - "hello-world:/root/.acme.sh"
 
 volumes:
   hello-world: {}
+  xui: {}
