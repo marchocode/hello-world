@@ -6,10 +6,13 @@ services:
     expose:
       - 54321
       - 443
-  nginx:
+  hello-world:
     depends_on:
       - xui
-    image: nginx:latest
+    build: .
+    environment:
+      - HOST=example.com
+    image: marchocode/hello-world
     ports:
       - "443:443"
       - "80:80"
