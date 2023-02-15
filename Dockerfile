@@ -7,6 +7,8 @@ EXPOSE 80
 EXPOSE 443
 
 COPY ./entrypoint.sh .
+COPY ./nginx.conf /etc/nginx
+
 RUN chmod +x ./entrypoint.sh
 
 RUN ln -s /root/.acme.sh/acme.sh /usr/local/bin/

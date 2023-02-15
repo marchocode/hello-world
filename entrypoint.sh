@@ -12,6 +12,11 @@ warn() {
     echo -e "${now} ${yellow}${1}${plain}"
 }
 
+error() {
+    now=$(date +"[%a %b %d %T %Y]")
+    echo -e "${now} ${red}${1}${plain}"   
+}
+
 log() {
     # log formatter [Tue Feb 14 03:17:50 UTC 2023]
     now=$(date +"[%a %b %d %T %Y]")
@@ -37,11 +42,14 @@ install(){
 
     mkdir -p ${CERT_DIR}
 
-    acme.sh --install-cert -d example.com \
+    acme.sh --install-cert -d ${HOST} \
             --key-file       ${CERT_DIR}/acme.key  \
-            --fullchain-file ${CERT_DIR}/acme.crt \
-            --reloadcmd     "service nginx force-reload"
+            --fullchain-file ${CERT_DIR}/acme.crt
 }
+
+if [[ -z ${HOST} ]]; then
+   error "You must add a HOST environment variable" && exit 1
+fi
 
 log "Your Domian is ${HOST}"
 log "Check Your certification..."
@@ -50,7 +58,10 @@ checkout
 
 if [ $? == 1 ]; then
     log "Now. we need to issue a cert."
+    issue && install
 fi
 
 log "Check certification again.."
+acme.sh --list
 
+exec "$@"
