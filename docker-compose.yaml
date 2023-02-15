@@ -3,7 +3,7 @@ version: '3'
 services:
   xui:
     image: enwaiax/x-ui:latest
-    container_name: x-ui
+    container_name: xui
     expose:
       - 54321
       - 443
