@@ -6,9 +6,7 @@ services:
     container_name: xui
     volumes:
       - "xui:/etc/x-ui"
-    expose:
-      - 54321
-      - 443
+    network_mode: host
   hello-world:
     depends_on:
       - xui
@@ -17,9 +15,7 @@ services:
       - HOST=example.com
     image: marchocode/hello-world
     container_name: hello-world
-    ports:
-      - "443:443"
-      - "80:80"
+    network_mode: host
     volumes:
       - "./conf.d:/etc/nginx/conf.d"
       - "hello-world:/root/.acme.sh"
