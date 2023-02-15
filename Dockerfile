@@ -1,6 +1,6 @@
 FROM debian:latest
 
-RUN apt update && apt install nginx curl cron -y
+RUN apt update && apt install nginx curl socat cron -y
 RUN curl https://get.acme.sh | sh -s email=marchocode@github.com
 
 EXPOSE 80
