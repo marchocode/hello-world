@@ -3,6 +3,7 @@ version: '3'
 services:
   xui:
     image: enwaiax/x-ui:latest
+    container_name: x-ui
     expose:
       - 54321
       - 443
@@ -13,6 +14,7 @@ services:
     environment:
       - HOST=example.com
     image: marchocode/hello-world
+    container_name: hello-world
     ports:
       - "443:443"
       - "80:80"
