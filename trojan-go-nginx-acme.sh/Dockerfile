@@ -10,3 +10,5 @@ RUN chmod +x ./entrypoint.sh
 VOLUME [ "/root/.acme.sh" ]
 
 ENTRYPOINT [ "./entrypoint.sh" ]
+
+CMD ["bash"]
