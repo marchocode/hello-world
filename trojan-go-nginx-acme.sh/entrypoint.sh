@@ -44,7 +44,7 @@ checkout(){
 }
 
 
-config() {
+generate_config() {
 
 mkdir ${TROJAN_GO}
 cat > ${TROJAN_GO}/config.json <<EOF
@@ -65,7 +65,7 @@ cat > ${TROJAN_GO}/config.json <<EOF
 EOF
 }
 
-install(){
+install_cert(){
 
     log "Start to install certification."
 
@@ -87,5 +87,8 @@ while checkout
 do
     issue
 done
+
+install_cert
+generate_config
 
 exec "$@"

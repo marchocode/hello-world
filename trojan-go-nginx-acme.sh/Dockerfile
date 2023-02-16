@@ -11,4 +11,4 @@ VOLUME [ "/root/.acme.sh" ]
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 
-CMD ["bash"]
+CMD [ "bash" ]
