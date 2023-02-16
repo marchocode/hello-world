@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    depends_on:
+      - trojan-helper
+    container_name: trojan-nginx
+    network_mode: host
+  trojan:
+    depends_on:
+      - nginx
+    image: trojan-go:latest
+    network_mode: host
+    container_name: trojan
+    volumes:
+      - "trojan-data:/etc/trojan-go"
+  trojan-helper:
+    build: .
+    image: trojan-helper:latest
+    container_name: trojan-helper
+    network_mode: host
+    environment:
+      - HOST=hk.marcho.top
+      - PASSWORD=password
+      - EMAIL=youremail@gmail.com
+    volumes:
+      - "trojan-data:/etc/trojan-go"
+
+volumes:
+  trojan-data: {}
