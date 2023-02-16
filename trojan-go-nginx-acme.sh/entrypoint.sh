@@ -46,7 +46,7 @@ checkout(){
 
 generate_config() {
 
-mkdir ${TROJAN_GO}
+mkdir -p ${TROJAN_GO}
 cat > ${TROJAN_GO}/config.json <<EOF
 {
     "run_type": "server",
@@ -58,8 +58,8 @@ cat > ${TROJAN_GO}/config.json <<EOF
         "${PASSWORD}"
     ],
     "ssl": {
-        "cert": "server.crt",
-        "key": "server.key"
+        "cert": "${TROJAN_GO}/server.crt",
+        "key": "${TROJAN_GO}/server.key"
     }
 }
 EOF

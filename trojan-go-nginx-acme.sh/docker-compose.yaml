@@ -21,10 +21,8 @@ services:
     image: trojan-helper:latest
     container_name: trojan-helper
     network_mode: host
-    environment:
-      - HOST=hk.marcho.top
-      - PASSWORD=password
-      - EMAIL=youremail@gmail.com
+    env_file:
+      - .env
     volumes:
       - "trojan-data:/etc/trojan-go"
 
