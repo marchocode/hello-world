@@ -5,7 +5,7 @@ green='\033[0;32m'
 yellow='\033[0;33m'
 plain='\033[0m'
 
-CERT_DIR="/etc/nginx/cert"
+TROJAN_GO="/etc/trojan-go"
 
 warn() {
     now=$(date +"[%a %b %d %T %Y]")
@@ -23,29 +23,57 @@ log() {
     echo "${now} ${1}"
 }
 
-checkout(){
-    if acme.sh --list | grep -Eqi "${HOST}"; then
-
-        log "We found the domain certification!"
-        return 0
-    fi
-    
-    warn "We can't find the domain ${HOST}'s certfication"
-    return 1
-}
-
 issue(){
+
+    log "I'm creating a certication. Just a minute"
+    acme.sh --register-account -m ${EMAIL}
     acme.sh --issue -d ${HOST} --standalone
 }
 
-install(){
+checkout(){
 
-    log "Start to install certificaion."
-    mkdir -p ${CERT_DIR}
+    acme.sh --list
+
+    if acme.sh --list | grep -Eqi "${HOST}"; then
+        log "We found the domain certification!"
+        return 1
+    fi
+    
+    warn "We can't find the domain ${HOST}'s certification"
+    return 0
+}
+
+
+generate_config() {
+
+mkdir -p ${TROJAN_GO}
+cat > ${TROJAN_GO}/config.json <<EOF
+{
+    "run_type": "server",
+    "local_addr": "0.0.0.0",
+    "local_port": 443,
+    "remote_addr": "127.0.0.1",
+    "remote_port": 80,
+    "password": [
+        "${PASSWORD}"
+    ],
+    "ssl": {
+        "cert": "${TROJAN_GO}/server.crt",
+        "key": "${TROJAN_GO}/server.key"
+    }
+}
+EOF
+}
+
+install_cert(){
+
+    log "Start to install certification."
 
     acme.sh --install-cert -d ${HOST} \
-            --key-file       ${CERT_DIR}/acme.key  \
-            --fullchain-file ${CERT_DIR}/acme.crt
+            --key-file       ${TROJAN_GO}/server.key  \
+            --fullchain-file ${TROJAN_GO}/server.crt
+
+    return 0
 }
 
 if [[ -z ${HOST} ]]; then
@@ -55,16 +83,12 @@ fi
 log "Your Domian is ${HOST}"
 log "Check Your certification..."
 
-checkout
-
-if [ $? == 1 ]; then
-    log "Now. we need to issue a cert."
+while checkout
+do
     issue
-fi
+done
 
-log "Check certification again.."
-acme.sh --list
-
-install
+install_cert
+generate_config
 
 exec "$@"

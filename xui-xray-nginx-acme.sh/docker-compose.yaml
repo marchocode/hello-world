@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  xui:
+    image: enwaiax/x-ui:latest
+    container_name: xui
+    volumes:
+      - "xui:/etc/x-ui"
+    network_mode: host
+  hello-world:
+    depends_on:
+      - xui
+    build: .
+    environment:
+      - HOST=example.com
+    image: marchocode/hello-world
+    container_name: hello-world
+    network_mode: host
+    volumes:
+      - "./conf.d:/etc/nginx/conf.d"
+      - "hello-world:/root/.acme.sh"
+
+volumes:
+  hello-world: {}
+  xui: {}

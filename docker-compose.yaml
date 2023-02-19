@@ -1,25 +1,30 @@
-version: '3'
+dockversion: '3'
 
 services:
-  xui:
-    image: enwaiax/x-ui:latest
-    container_name: xui
-    volumes:
-      - "xui:/etc/x-ui"
-    network_mode: host
-  hello-world:
+  nginx:
+    image: nginx:latest
     depends_on:
-      - xui
-    build: .
-    environment:
-      - HOST=example.com
-    image: marchocode/hello-world
-    container_name: hello-world
+      trojan-helper:
+        condition: service_completed_successfully
+    container_name: trojan-nginx
     network_mode: host
+  trojan:
+    depends_on:
+      - nginx
+    image: teddysun/trojan-go:latest
+    network_mode: host
+    container_name: trojan
     volumes:
-      - "./conf.d:/etc/nginx/conf.d"
-      - "hello-world:/root/.acme.sh"
+      - "trojan-data:/etc/trojan-go"
+  trojan-helper:
+    build: .
+    image: trojan-helper:latest
+    container_name: trojan-helper
+    network_mode: host
+    env_file:
+      - .env
+    volumes:
+      - "trojan-data:/etc/trojan-go"
 
 volumes:
-  hello-world: {}
-  xui: {}
+  trojan-data: {}

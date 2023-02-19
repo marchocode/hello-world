@@ -1,18 +1,14 @@
-FROM debian:latest
+FROM ubuntu as builder
 
-RUN apt update && apt install nginx curl socat cron -y
+RUN apt update && apt install curl cron socat -y
 RUN curl https://get.acme.sh | sh
-
-EXPOSE 80
-EXPOSE 443
+RUN ln -s /root/.acme.sh/acme.sh /usr/local/bin/
 
 COPY ./entrypoint.sh .
-COPY ./nginx.conf /etc/nginx
-
 RUN chmod +x ./entrypoint.sh
 
-RUN ln -s /root/.acme.sh/acme.sh /usr/local/bin/
+VOLUME [ "/root/.acme.sh" ]
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "bash" ]
