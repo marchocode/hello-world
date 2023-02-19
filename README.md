@@ -52,6 +52,7 @@ Maybe you can choose your favorite client.
 
 ```text
 
+Protocol: Trojan 
 Host: Your domain address.
 Password: Your customer password.
 Port: 443
@@ -63,5 +64,6 @@ Transport: TCP
 
 
 ## Reference
+- https://github.com/p4gefau1t/trojan-go
 - https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script
 - https://github.com/acmesh-official/acme.sh
